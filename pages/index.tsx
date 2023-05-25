@@ -56,5 +56,5 @@ export const getStaticProps = async () => {
     `*[_type == "post"]{title,"slug":slug.current,"author":author->name,"text":body[],"imageUrl": mainImage.asset->url}`
   );
   console.log(posts);
-  return { props: { posts } };
+  return { props: { posts }, revalidate: 100 };
 };

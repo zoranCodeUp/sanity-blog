@@ -80,6 +80,7 @@ export const getStaticProps = async ({ params }: { params: Slug }) => {
     props: {
       post,
     },
+    revalidate: 100, // In seconds
   };
 };
 
