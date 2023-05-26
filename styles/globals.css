@@ -20,11 +20,24 @@ body {
   @apply bg-gray-100;
 }
 p {
-  @apply text-gray-700;
+  @apply text-gray-500;
 }
 
 h1,
 h3 {
-  @apply text-gray-900;
-  text-transform: capitalize;
+  @apply text-gray-900 capitalize;
+}
+.smudge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: linear-gradient(
+    to top,
+    rgb(255, 250, 250) 0%,
+    rgba(207, 207, 207, 0) 10%,
+    rgba(170, 168, 168, 0) 90%,
+    rgb(238, 235, 235) 100%
+  );
 }

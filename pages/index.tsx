@@ -10,6 +10,7 @@ const PostIndex = ({
   console.log(posts);
   return (
     <div className="flex flex-wrap gap-4  p-8">
+      {" "}
       {posts &&
         posts.map((post) => (
           <Link href={`post/${post.slug}`} key={post.title}>
@@ -26,9 +27,16 @@ const PostIndex = ({
                 />
               </div>
               <div className="flex flex-col p-2">
-                <p className="font-mono text-sm  text-gray-400">
-                  Author: {post.author}
-                </p>
+                <div className="flex gap-1 items-center">
+                  <img
+                    src={post.author?.img}
+                    alt=""
+                    className="w-8 h-8 rounded-full"
+                  />
+                  <p className="font-mono text-sm  text-gray-400">
+                    {post.author?.name}
+                  </p>
+                </div>
                 <h1 className="font-extrabold text-gray-800 text-3xl my-4">
                   {post.title}
                 </h1>
@@ -42,10 +50,14 @@ const PostIndex = ({
 };
 
 export default PostIndex;
+type Author = {
+  name: string;
+  img: string;
+};
 
 type Post = {
   title: string;
-  author: string;
+  author: Author;
   text: [];
   imageUrl: string;
   slug: string;
@@ -53,7 +65,7 @@ type Post = {
 
 export const getStaticProps = async () => {
   const posts: Post[] = await client.fetch(
-    `*[_type == "post"]{title,"slug":slug.current,"author":author->name,"text":body[],"imageUrl": mainImage.asset->url}`
+    `*[_type == "post"]{title,"slug":slug.current,"author":author->{name,"img":image.asset->url}, "text":body[],"imageUrl": mainImage.asset->url}`
   );
   console.log(posts);
   return { props: { posts }, revalidate: 100 };

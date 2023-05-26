@@ -23,8 +23,9 @@ const Post = ({ post }: InferGetStaticPropsType<typeof getStaticProps>) => {
                   placeholder="blur"
                   className="w-full h-80 object-cover rounded-md"
                 />
+                <div className="smudge"></div>
               </div>
-              <div className="flex flex-col w-full p-8">
+              <div className="flex flex-col w-3/4 mx-auto p-8">
                 <p className="font-mono text-sm  text-gray-400">
                   Published: {post.created}
                 </p>
