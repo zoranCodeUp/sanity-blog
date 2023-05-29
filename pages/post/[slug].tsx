@@ -65,11 +65,11 @@ type Post = {
   imageUrl: string;
   created: string;
 };
-type Slug = { slug: string | "" }; //slug must NOT be undefined
+type Slug = { slug: string }; //slug must NOT be undefined
 
 export const getStaticProps = async ({ params }: { params: Slug }) => {
   // It's important to default the slug so that it doesn't return "undefined"
-  const slug = params.slug;
+  const slug = params.slug || "";
   const post: Post = await client.fetch(
     `
     *[_type == "post" && slug.current == $slug][0]{title, "author":author->name,"text":body[],  "imageUrl": mainImage.asset->url, "created":_createdAt}
