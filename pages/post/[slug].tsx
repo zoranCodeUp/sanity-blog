@@ -2,7 +2,7 @@ import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from "next";
 import client from "../../config/client";
 import { PortableText } from "@portabletext/react";
 import Image from "next/image";
-import { NoFallbackError } from "next/dist/server/base-server";
+import { format } from "date-fns";
 
 const Post = ({ post }: InferGetStaticPropsType<typeof getStaticProps>) => {
   console.log(post);
@@ -10,7 +10,6 @@ const Post = ({ post }: InferGetStaticPropsType<typeof getStaticProps>) => {
     <>
       {post ? (
         <>
-          {" "}
           <article className="h-screen w-screen flex justify-center">
             <div className="gap-4 flex flex-col w-full">
               <div className="w-full h-1/3 relative">
@@ -23,11 +22,12 @@ const Post = ({ post }: InferGetStaticPropsType<typeof getStaticProps>) => {
                   placeholder="blur"
                   className="w-full h-80 object-cover rounded-md"
                 />
-                <div className="smudge"></div>
+                <div className="white-gradient" />
               </div>
-              <div className="flex flex-col w-3/4 mx-auto p-8">
+              <div className="flex flex-col xl:w-3/4 w-full mx-auto p-8">
                 <p className="font-mono text-sm  text-gray-400">
-                  Published: {post.created}
+                  Published:{" "}
+                  {format(new Date(post.created), "MMMM dd, yyyy HH:mm")}
                 </p>
                 <p className="font-mono text-sm  text-gray-400">
                   Autor: {post.author}
@@ -49,12 +49,12 @@ const Post = ({ post }: InferGetStaticPropsType<typeof getStaticProps>) => {
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const paths: string[] = await client.fetch(
-    `*[_type == "post" && defined(slug.current)][].slug.current`
+    `*[_type == "post" && defined(slug.current)][].slug.current` //defined() '!null'
   );
   console.log(paths);
   return {
     paths: paths.map((slug) => ({ params: { slug } })),
-    fallback: true,
+    fallback: false,
   };
 };
 
@@ -65,7 +65,7 @@ type Post = {
   imageUrl: string;
   created: string;
 };
-type Slug = { slug: string | "" };
+type Slug = { slug: string | "" }; //slug must NOT be undefined
 
 export const getStaticProps = async ({ params }: { params: Slug }) => {
   // It's important to default the slug so that it doesn't return "undefined"
